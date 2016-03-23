@@ -1,0 +1,15 @@
+{
+  "name": "inisire/monolog",
+  "description": "Slack handler for monolog",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "require": {
+    "monolog/monolog": "~1.8",
+    "inisire/slack": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "Monolog": "src/"
+    }
+  }
+}
