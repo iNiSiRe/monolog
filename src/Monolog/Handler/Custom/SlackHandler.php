@@ -67,7 +67,7 @@ class SlackHandler extends AbstractProcessingHandler
     protected function write(array $record)
     {
         $message = (new Message())
-            ->setUsername('logger')
+            ->setUsername($this->username)
             ->addField(new MessageField('Level', $record['level_name'], true))
             ->setText($record['message'])
             ->setColor($this->getAttachmentColor($record['level']));
