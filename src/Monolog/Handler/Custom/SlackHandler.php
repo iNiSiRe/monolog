@@ -3,8 +3,10 @@
 namespace Monolog\Handler\Custom;
 
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
 use Slack\Model\Channel;
 use Slack\Model\Message;
+use Slack\Model\MessageField;
 
 class SlackHandler extends AbstractProcessingHandler
 {
@@ -13,9 +15,46 @@ class SlackHandler extends AbstractProcessingHandler
      */
     protected $channel;
 
+    /**
+     * @var string
+     */
+    protected $username = 'logger';
+
+    /**
+     * @param Channel $channel
+     */
     public function setChannel(Channel $channel)
     {
         $this->channel = $channel;
+    }
+
+    /**
+     * @param $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * Returned a Slack message attachment color
+     *
+     * @param  int $level
+     *
+     * @return string
+     */
+    protected function getAttachmentColor($level)
+    {
+        switch (true) {
+            case $level >= Logger::ERROR:
+                return 'danger';
+            case $level >= Logger::WARNING:
+                return 'warning';
+            case $level >= Logger::INFO:
+                return 'good';
+            default:
+                return '#e3e4e6';
+        }
     }
 
     /**
@@ -27,10 +66,12 @@ class SlackHandler extends AbstractProcessingHandler
      */
     protected function write(array $record)
     {
-        $content = $record['formatted'];
         $message = (new Message())
             ->setUsername('logger')
-            ->setText($content);
+            ->addField(new MessageField('Level', $record['level_name'], true))
+            ->setText($record['message'])
+            ->setColor($this->getAttachmentColor($record['level']));
 
         $this->channel->send($message);
-    }}
+    }
+}
