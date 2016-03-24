@@ -7,7 +7,7 @@ Example for Symfony2.
 
 Create channel:
 
-`
+```yml
 slack.channel.log:
     class: Slack\Model\Channel
     arguments: ["https://hooks.slack.com/services/XXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"]
