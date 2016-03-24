@@ -66,6 +66,10 @@ class SlackHandler extends AbstractProcessingHandler
      */
     protected function write(array $record)
     {
+        if (!$this->channel) {
+            throw new \RuntimeException('Channel for SlackHandler is not defined');
+        }
+
         $message = (new Message())
             ->setUsername($this->username)
             ->addField(new MessageField('Level', $record['level_name'], true))
